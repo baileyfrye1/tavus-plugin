@@ -1,0 +1,9 @@
+.onboardingQuestions {
+	background: var(--clr-white);
+	border-radius: var(--radius-lg);
+	border: 1px solid var(--clr-border);
+	padding: var(--space-xl);
+	max-width: 800px;
+	margin-inline: auto;
+	margin-top: var(--space-2xl);
+}

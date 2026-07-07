@@ -8,4 +8,12 @@ export default defineConfig({
     react(),
     babel({ presets: [reactCompilerPreset()] })
   ],
+  base: '/wp-content/plugins/tavus-integration/dist/',
+  build: {
+    outDir: 'dist',
+    manifest: true,
+    rolldownOptions: {
+      input: 'src/main.tsx'
+    }
+  }
 })
