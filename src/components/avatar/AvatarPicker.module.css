@@ -1,0 +1,20 @@
+.moduleGrid {
+	display: grid;
+	grid-template-columns: repeat(3, 1fr);
+	gap: 1rem;
+	margin-top: var(--space-xl);
+}
+
+.skeleton {
+	height: 325px;
+	background-color: gray;
+	border-radius: var(--radius-md);
+	animation: infinite pulse 2s;
+	animation-delay: calc(0.2s * (sibling-index() - 1));
+}
+
+@keyframes pulse {
+	50% {
+		opacity: 75%;
+	}
+}

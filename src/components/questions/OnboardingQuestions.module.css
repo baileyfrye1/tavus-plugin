@@ -1,0 +1,57 @@
+.onboardingQuestions {
+	background-color: var(--clr-white);
+	border-radius: var(--radius-lg);
+	border: 1px solid var(--clr-border);
+	padding: var(--space-xl) var(--space-xl) var(--space-3xl);
+	max-width: 800px;
+	margin-inline: auto;
+	margin-top: var(--space-2xl);
+
+	.formContent {
+		display: flex;
+		flex-direction: column;
+		gap: 1rem;
+		justify-content: center;
+		align-items: center;
+		margin-top: var(--space-xl);
+	}
+
+	.question {
+		width: 50ch;
+		text-align: center;
+	}
+
+	.btnGroup {
+		margin-top: var(--space-lg);
+		display: flex;
+		gap: 0.5rem;
+
+		.formBtn {
+			padding: 0.25em 1em;
+			font-size: 1.5rem;
+			cursor: pointer;
+			outline: none;
+			transition: background-color 0.3s;
+			border: none;
+			font-family: 'Natron';
+			letter-spacing: 1px;
+		}
+
+		.nextBtn {
+			background-color: var(--clr-accent);
+
+			&:hover {
+				background-color: color-mix(in oklab, var(--clr-accent), black 5%);
+			}
+		}
+
+		.backBtn {
+			border: 2px solid var(--clr-accent);
+			background-color: var(--clr-white);
+
+			&:hover {
+				background-color: color-mix(in oklab, var(--clr-white), black 5%);
+			}
+		}
+	}
+}
