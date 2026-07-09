@@ -21,6 +21,17 @@
 		text-align: center;
 	}
 
+	.answerChoices {
+		max-width: 250px;
+		overflow: hidden;
+		text-overflow: ellipsis;
+		outline: none;
+		border: 1px solid var(--clr-border);
+		background-color: var(--clr-white);
+		padding: 0.5rem;
+		box-shadow: 5px 5px 10px rgba(0, 0, 0, 0.08);
+	}
+
 	.btnGroup {
 		margin-top: var(--space-lg);
 		display: flex;

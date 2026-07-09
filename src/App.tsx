@@ -1,8 +1,8 @@
 import { useState } from "react";
-import "./App.css";
+import styles from "./App.module.css";
 import OnboardingFlow from "./components/OnboardingFlow";
 
-export type OnboardingStage = "questions" | "avatar" | "complete";
+export type OnboardingStage = "questions" | "avatar" | "library";
 
 function App() {
   const [stage, setStage] = useState<OnboardingStage>("questions");
@@ -15,16 +15,21 @@ function App() {
       "heading": "Avatar Selection",
       "eyebrow": "Pick the avatar you'd like to hear from"
     },
-    "complete": {
+    "library": {
       "heading": "Library",
       "eyebrow": "Browse learning videos",
     },
   }
 
   return (
-    <div className="container resources">
-      <h2 className="resources__heading">{stageText[stage].heading}</h2>
-      <p className="resources__eyebrow">{stageText[stage].eyebrow}</p>
+    <div className={`container ${styles.resources}`}>
+      <div className={styles.headingContainer}>
+        <div>
+          <h2 className={styles.resourcesHeading}>{stageText[stage].heading}</h2>
+          <p className={styles.resourcesEyebrow}>{stageText[stage].eyebrow}</p>
+        </div>
+        <p className={styles.viewAll} onClick={() => setStage("library")}>View All</p>
+      </div>
       <OnboardingFlow stage={stage} setStage={setStage} />
     </div>
   );

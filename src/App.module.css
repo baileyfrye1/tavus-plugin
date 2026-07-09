@@ -1,0 +1,29 @@
+.resources {
+  background-color: var(--clr-bg-light);
+  padding: var(--space-xl);
+
+  .headingContainer {
+    display: flex;
+    justify-content: space-between;
+    .resourcesHeading {
+      margin-bottom: 0;
+      font-size: var(--font-lg);
+    }
+  
+    .resourcesEyebrow {
+      font-size: var(--font-xs);
+      color: var(--clr-text-muted);
+      margin: 0;
+    }
+
+    .viewAll {
+      font-weight: 600;
+      cursor: pointer;
+      align-self: flex-start;
+
+      &:hover {
+        text-decoration: underline;
+      }
+    }
+  }
+}

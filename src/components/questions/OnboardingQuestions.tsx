@@ -27,7 +27,7 @@ function OnboardingQuestions({ onComplete }: OnboardingQuestionsProps) {
 			{currentIndex > 0 && <StepIndicator currentIndex={currentIndex} totalSteps={totalSteps} />}
 			<div className={styles.formContent}>
 				<h3 className={styles.question}>{currentQuestion.text}</h3>
-				<select name="questions" id="questions" onChange={(e) => setSelected(e.target.value)}>
+				<select name="questions" id="questions" onChange={(e) => setSelected(e.target.value)} className={styles.answerChoices}>
 					<option value="">Select an option...</option>
 					{currentQuestion.options.map((opt) => (
 						<option key={opt.value} value={opt.value}>{opt.label}</option>

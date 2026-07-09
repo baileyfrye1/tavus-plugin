@@ -21,9 +21,9 @@ function OnboardingFlow({ stage, setStage }: OnboardingFlowProps) {
 		case 'avatar':
 			return <AvatarPicker onSelect={(avatarId) => {
 				setAnswers(prev => ({ ...prev, avatar: avatarId }));
-				setStage('complete');
+				setStage('library');
 			}} />
-		case 'complete':
+		case 'library':
 			return <ModuleGrid answers={answers} />
 	}
 }

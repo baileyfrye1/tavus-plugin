@@ -1,6 +1,7 @@
 :root {
   /* Colors */
   --clr-white: oklch(100.0% 0.000 89.9);
+  --clr-black: oklch(0.0% 0.000 0.0);
   --clr-primary: oklch(64.8% 0.061 258.3);
   --clr-accent: oklch(73.0% 0.163 132.0);
   --clr-border: oklch(80.5% 0.000 89.9);
@@ -17,6 +18,9 @@
   --space-3xl: 4rem;
   --space-4xl: 5rem;
 
+  /* Width */
+  --content-width: 1120px;
+
   /* Border Radius */
   --radius-md: 0.75rem;
   --radius-lg: 1.25rem;
@@ -25,7 +29,8 @@
   /* Font Sizes */
   --font-lg: 3rem;
   --font-md: 1.5rem;
-  --font-sm: 1rem;
+  --font-sm: 1.125rem;
+  --font-xs: 1rem;
 }
 
 #tavus-resources {
@@ -35,7 +40,7 @@
 
 .container {
   height: 100%;
-  width: min(1120px, 100% - 3rem);
+  width: min(var(--content-width), 100% - 3rem);
   padding-inline: 1.5rem;
   margin-inline: auto;
   overflow: hidden;
