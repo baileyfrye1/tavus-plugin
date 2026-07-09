@@ -1,11 +1,4 @@
-export type UserType = 'parent-caregiver' | 'healthcare-provider';
-
-export type Question = {
-	id: string;
-	text: string;
-	options: { value: string, label: string; }[];
-	track?: UserType;
-}
+import type { Question } from "../types";
 
 export const questions: Question[] = [
 	{

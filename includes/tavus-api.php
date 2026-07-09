@@ -1,7 +1,5 @@
 <?php
 
-use WP_REST_Request;
-
 if (!defined('ABSPATH')) {
     exit;
 }
@@ -45,5 +43,35 @@ class Tavus_API
         }
 
         return json_decode(wp_remote_retrieve_body($response), true);
+    }
+
+    public function fetchFaces()
+    {
+        $faceIds = $this->getFaceIds();
+        if (empty($faceIds)) {
+            return [];
+        }
+
+        $queryString = implode(',', $faceIds);
+
+        $response = wp_remote_get("{$this->baseUrl}/faces?face_ids={$queryString}", [
+            'headers' => [
+                'x-api-key' => $this->apiKey
+            ]
+        ]);
+
+        if (is_wp_error($response)) {
+            throw new \RuntimeException($response->get_error_message());
+        }
+
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+
+        return $body['data'] ?? [];
+    }
+
+    private function getFaceIds()
+    {
+        //TODO: Replace with fetching avatar face ids from admin page when built
+        return ['r3f427f43c9d', 'r4ba1277e4fb'];
     }
 }

@@ -5,7 +5,8 @@ import OnboardingFlow from "./components/OnboardingFlow";
 export type OnboardingStage = "questions" | "avatar" | "library";
 
 function App() {
-  const [stage, setStage] = useState<OnboardingStage>("questions");
+  const [stage, setStage] = useState<OnboardingStage>("avatar");
+
   const stageText: Record<OnboardingStage, Record<"heading" | "eyebrow", string>> = {
     "questions": {
       "heading": "Find Your Learning Modules",

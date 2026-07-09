@@ -4,6 +4,9 @@ class Tavus_Bootstrap
 {
     public function __construct()
     {
+        require_once __DIR__ . '/tavus-api.php';
+        require_once __DIR__ . '/tavus-rest.php';
+
         add_shortcode('tavus_integration', [$this, 'registerShortcode']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
     }

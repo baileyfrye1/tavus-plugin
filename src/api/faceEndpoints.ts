@@ -1,0 +1,13 @@
+import { API_BASE } from "./config";
+
+export async function fetchFaces() {
+	const res = await fetch(`${API_BASE}/faces`, {
+		method: 'GET',
+	});
+
+	if (!res.ok) {
+		throw new Error('Failed to fetch avatar faces');
+	}
+
+	return await res.json();
+}

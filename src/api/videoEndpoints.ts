@@ -1,7 +1,7 @@
-const BASE = '/wp-json/tavus/v1';
+import { API_BASE } from "./config";
 
 export async function fetchVideos() {
-	const res = await fetch(`${BASE}/videos`, {
+	const res = await fetch(`${API_BASE}/videos`, {
 		method: 'GET'
 	});
 
@@ -13,7 +13,7 @@ export async function fetchVideos() {
 }
 
 export async function fetchVideo(videoId: string) {
-	const res = await fetch(`${BASE}/video/${videoId}`, {
+	const res = await fetch(`${API_BASE}/video/${videoId}`, {
 		method: 'GET'
 	});
 
