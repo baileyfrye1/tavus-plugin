@@ -1,0 +1,24 @@
+.learningModuleWrapper {
+  border-radius: var(--radius-md);
+  border: 1px solid var(--clr-border);
+  padding: var(--space-sm) var(--space-sm) var(--space-xl);
+  background-color: var(--clr-white);
+  cursor: pointer;
+  transition: box-shadow 0.3s;
+
+  .learningModule {
+    display: block;
+    max-height: 100%;
+    max-width: 100%;
+    border-radius: calc(var(--radius-md) - var(--space-sm));
+  }
+
+  .learningModuleTitle {
+    margin-top: var(--space-sm);
+    font-size: var(--font-sm);
+  }
+
+  &:hover {
+    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+  }
+}

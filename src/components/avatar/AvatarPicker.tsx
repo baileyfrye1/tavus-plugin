@@ -1,8 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import styles from "./AvatarPicker.module.css";
+import globalStyles from "../../GlobalStyles.module.css";
 import { fetchFaces } from "../../api/faceEndpoints";
 import { type Face } from "../../types";
 import { useState } from "react";
+import SkeletonGrid from "../SkeletonGrid";
 
 type AvatarPickerProps = {
   onSelect: (avatarId: string) => void;
@@ -23,26 +25,16 @@ function AvatarPicker({ onSelect }: AvatarPickerProps) {
   });
 
   if (isLoading) {
-    return (
-      <div className={styles.avatarGrid}>
-        {Array.from({ length: 3 }).map(() => (
-          <div className={styles.skeleton}></div>
-        ))}
-      </div>
-    );
+    return <SkeletonGrid />;
   }
 
   if (isError || !faces) {
-    return (
-      <>
-        <h3>Could not fetch faces</h3>
-      </>
-    );
+    return <h3>Could not fetch faces</h3>;
   }
 
   return (
     <>
-      <div className={styles.avatarGrid}>
+      <div className={globalStyles.avatarGrid}>
         {faces.map((face) => (
           <div
             className={`${styles.avatarWrapper} ${selectedAvatarId === face.face_id ? styles.selected : ""}`}

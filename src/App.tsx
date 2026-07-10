@@ -1,5 +1,6 @@
 import { useState } from "react";
 import styles from "./App.module.css";
+import globalStyles from "./GlobalStyles.module.css";
 import OnboardingFlow from "./components/OnboardingFlow";
 import { RotateCcw } from "lucide-react";
 
@@ -28,7 +29,7 @@ function App() {
   };
 
   return (
-    <div className={`container ${styles.resources}`}>
+    <div className={`${globalStyles.container} ${styles.resources}`}>
       <div className={styles.headingContainer}>
         <div>
           <h2 className={styles.resourcesHeading}>

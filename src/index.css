@@ -1,12 +1,12 @@
 :root {
   /* Colors */
-  --clr-white: oklch(100.0% 0.000 89.9);
-  --clr-black: oklch(0.0% 0.000 0.0);
+  --clr-white: oklch(100% 0 89.9);
+  --clr-black: oklch(0% 0 0);
   --clr-primary: oklch(64.8% 0.061 258.3);
-  --clr-accent: oklch(73.0% 0.163 132.0);
-  --clr-border: oklch(80.5% 0.000 89.9);
+  --clr-accent: oklch(73% 0.163 132);
+  --clr-border: oklch(80.5% 0 89.9);
   --clr-text-muted: oklch(53.5% 0.025 268.2);
-  --clr-bg-light: oklch(96.0% 0.001 197.1);
+  --clr-bg-light: oklch(96% 0.001 197.1);
 
   /* Spacing */
   --space-xs: 0.25rem;
@@ -20,6 +20,7 @@
 
   /* Width */
   --content-width: 1120px;
+  --card-size: 192px;
 
   /* Border Radius */
   --radius-md: 0.75rem;
@@ -36,12 +37,4 @@
 #tavus-resources {
   width: 100%;
   margin-block: var(--space-4xl);
-}
-
-.container {
-  height: 100%;
-  width: min(var(--content-width), 100% - 3rem);
-  padding-inline: 1.5rem;
-  margin-inline: auto;
-  overflow: hidden;
 }

@@ -1,25 +1,25 @@
 import { API_BASE } from "./config";
 
-export async function fetchVideos() {
-	const res = await fetch(`${API_BASE}/videos`, {
-		method: 'GET'
-	});
+export async function fetchVideos(faceId: string) {
+  const res = await fetch(`${API_BASE}/videos?face_id=${faceId}`, {
+    method: "GET",
+  });
 
-	if (!res.ok) {
-		throw new Error('Failed to fetch videos');
-	}
+  if (!res.ok) {
+    throw new Error("Failed to fetch videos");
+  }
 
-	return await res.json();
+  return await res.json();
 }
 
-export async function fetchVideo(videoId: string) {
-	const res = await fetch(`${API_BASE}/video/${videoId}`, {
-		method: 'GET'
-	});
+export async function fetchVideo(videoId: string, faceId: string) {
+  const res = await fetch(`${API_BASE}/video/${videoId}?face_id=${faceId}`, {
+    method: "GET",
+  });
 
-	if (!res.ok) {
-		throw new Error('Failed to fetch video');
-	}
+  if (!res.ok) {
+    throw new Error("Failed to fetch video");
+  }
 
-	return await res.json();
+  return await res.json();
 }

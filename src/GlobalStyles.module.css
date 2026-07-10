@@ -1,0 +1,22 @@
+.container {
+  height: 100%;
+  width: min(var(--content-width), 100% - 3rem);
+  padding-inline: var(--space-lg);
+  margin-inline: auto;
+  overflow: hidden;
+}
+
+.skeleton {
+  height: var(--card-size);
+  background-color: gray;
+  border-radius: var(--radius-md);
+  animation: infinite pulse 2s;
+  animation-delay: calc(0.2s * (sibling-index() - 1));
+}
+
+.avatarGrid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: var(--space-md);
+  margin-top: var(--space-xl);
+}

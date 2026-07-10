@@ -13,8 +13,11 @@ class Tavus_API
         $this->apiKey = defined('TAVUS_API_KEY') ? TAVUS_API_KEY : '';
     }
 
-    public function fetchVideos()
+    public function fetchVideos(WP_REST_Request $request)
     {
+        $faceId = $request->get_param('face_id');
+        /* $track = $request->get_param('track'); */
+
         $response = wp_remote_get("{$this->baseUrl}/videos", [
             'headers' => [
                 'x-api-key' => $this->apiKey,
@@ -25,7 +28,23 @@ class Tavus_API
             throw new \RuntimeException($response->get_error_message());
         }
 
-        return json_decode(wp_remote_retrieve_body($response), true);
+        $body = json_decode(wp_remote_retrieve_body($response), true);
+
+        $videos = $body['data'] ?? [];
+
+        if (count($videos) === 0) {
+            return [];
+        }
+
+        $filteredVideos = [];
+
+        foreach ($videos as $video) {
+            if ($video['replica_id'] === $faceId) {
+                $filteredVideos[] = $video;
+            }
+        }
+
+        return $filteredVideos;
     }
 
     public function fetchVideo(WP_REST_Request $request)

@@ -17,7 +17,19 @@ class Tavus_Rest_Controller
 		register_rest_route('tavus/v1', '/videos', [
 			'methods' => 'GET',
 			'permission_callback' => '__return_true',
-			'callback' => [$this->api, 'fetchVideos']
+			'callback' => [$this->api, 'fetchVideos'],
+			'args' => [
+				'face_id' => [
+					'required' => true,
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+				],
+				/* 'track' => [ */
+				/* 	'required' => true, */
+				/* 	'type' => 'string', */
+				/* 	'sanitize_callback' => 'sanitize_text_field', */
+				/* ], */
+			]
 		]);
 
 		register_rest_route('tavus/v1', '/video/(?P<videoId>[a-zA-Z0-9-]+)', [
@@ -29,7 +41,17 @@ class Tavus_Rest_Controller
 					'required' => true,
 					'type' => 'string',
 					'sanitize_callback' => 'sanitize_text_field',
-				]
+				],
+				'face_id' => [
+					'required' => true,
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+				],
+				/* 'track' => [ */
+				/* 	'required' => true, */
+				/* 	'type' => 'string', */
+				/* 	'sanitize_callback' => 'sanitize_text_field', */
+				/* ], */
 			],
 		]);
 

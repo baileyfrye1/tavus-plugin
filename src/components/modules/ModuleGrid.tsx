@@ -1,16 +1,48 @@
-import styles from "../avatar/AvatarPicker.module.css";
+import { useQuery } from "@tanstack/react-query";
+import { fetchVideos } from "../../api/videoEndpoints";
+import type { Video } from "../../types";
+import SkeletonGrid from "../SkeletonGrid";
+import globalStyles from "../../GlobalStyles.module.css";
+import styles from "./ModuleGrid.module.css";
 
 type ModuleGridProps = {
   answers: Record<string, string>;
 };
 
 function ModuleGrid({ answers }: ModuleGridProps) {
-  console.log(answers);
+  const {
+    data: videos,
+    isLoading,
+    isError,
+  } = useQuery<Video[]>({
+    queryKey: ["videos"],
+    queryFn: () => fetchVideos(answers.avatar),
+  });
+
+  if (isLoading) {
+    return <SkeletonGrid />;
+  }
+
+  if (isError || !videos) {
+    return <h3>Could not fetch videos</h3>;
+  }
+
   return (
-    <div className={styles.avatarGrid}>
-      {Array.from({ length: 3 }).map(() => (
-        <div className={styles.skeleton}></div>
-      ))}
+    <div className={globalStyles.avatarGrid}>
+      {videos.length === 0 ? (
+        <h3>No videos found with that avatar</h3>
+      ) : (
+        videos.map((video) => (
+          <div className={styles.learningModuleWrapper}>
+            <img
+              src={video.still_image_thumbnail_url}
+              alt={`Learning module ${video.video_name}`}
+              className={styles.learningModule}
+            />
+            <h3 className={styles.learningModuleTitle}>{video.video_name}</h3>
+          </div>
+        ))
+      )}
     </div>
   );
 }

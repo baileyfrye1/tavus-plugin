@@ -18,13 +18,13 @@
 
     .controlsGroup {
       display: flex;
-      gap: 0.5rem;
+      gap: var(--space-sm);
       align-items: center;
       justify-content: center;
 
       .resetBtn {
         background: transparent;
-        padding: 0.25rem;
+        padding: var(--space-xs);
         outline: none;
         border: 1px solid var(--clr-black);
         border-radius: var(--radius-md);
