@@ -7,7 +7,7 @@ if (!defined('ABSPATH')) {
 class Tavus_API
 {
     private $baseUrl = "https://tavusapi.com/v2";
-    private $apiKey;
+    private string $apiKey;
     public function __construct()
     {
         $this->apiKey = defined('TAVUS_API_KEY') ? TAVUS_API_KEY : '';

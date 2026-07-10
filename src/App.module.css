@@ -9,20 +9,43 @@
       margin-bottom: 0;
       font-size: var(--font-lg);
     }
-  
+
     .resourcesEyebrow {
       font-size: var(--font-xs);
       color: var(--clr-text-muted);
       margin: 0;
     }
 
-    .viewAll {
-      font-weight: 600;
-      cursor: pointer;
-      align-self: flex-start;
+    .controlsGroup {
+      display: flex;
+      gap: 0.5rem;
+      align-items: center;
+      justify-content: center;
 
-      &:hover {
-        text-decoration: underline;
+      .resetBtn {
+        background: transparent;
+        padding: 0.25rem;
+        outline: none;
+        border: 1px solid var(--clr-black);
+        border-radius: var(--radius-md);
+        display: flex;
+        height: 35px;
+        width: 35px;
+        cursor: pointer;
+        transition: opacity 0.3s;
+
+        &:hover {
+          opacity: 60%;
+        }
+      }
+
+      .viewAll {
+        font-weight: 600;
+        cursor: pointer;
+
+        &:hover {
+          text-decoration: underline;
+        }
       }
     }
   }

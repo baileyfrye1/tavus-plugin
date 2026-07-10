@@ -1,17 +1,19 @@
 <?php
 
-if(!defined('ABSPATH')) {
+if (!defined('ABSPATH')) {
 	exit;
 }
 
-class Tavus_Rest_Controller {
-	private $api;
+class Tavus_Rest_Controller
+{
+	private Tavus_API $api;
 	public function __construct()
 	{
 		$this->api = new Tavus_API();
 	}
 
-	public function registerRoutes() {
+	public function registerRoutes()
+	{
 		register_rest_route('tavus/v1', '/videos', [
 			'methods' => 'GET',
 			'permission_callback' => '__return_true',

@@ -1,44 +1,78 @@
 .avatarGrid {
-	display: grid;
-	grid-template-columns: repeat(3, 1fr);
-	gap: 1rem;
-	margin-top: var(--space-xl);
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  grid-auto-rows: 192px;
+  gap: 1rem;
+  margin-top: var(--space-xl);
 }
 
 .skeleton {
-	height: 192px;
-	background-color: gray;
-	border-radius: var(--radius-md);
-	animation: infinite pulse 2s;
-	animation-delay: calc(0.2s * (sibling-index() - 1));
+  height: 192px;
+  background-color: gray;
+  border-radius: var(--radius-md);
+  animation: infinite pulse 2s;
+  animation-delay: calc(0.2s * (sibling-index() - 1));
 }
 
 @keyframes pulse {
-	50% {
-		opacity: 75%;
-	}
+  50% {
+    opacity: 75%;
+  }
 }
 
 .avatarWrapper {
-	border-radius: var(--radius-md);
-	height: 100%;
-	width: 100%;
-	position: relative;
+  border-radius: var(--radius-md);
+  height: 100%;
+  width: 100%;
+  position: relative;
+  overflow: hidden;
 
-	.avatar {
-		height: 100%;
-		width: 100%;
-		cursor: pointer;
-	}
+  .avatar {
+    width: 100%;
+    cursor: pointer;
+  }
 
-	&:hover::after {
-		content: '';
-		position: absolute;
-		top: 0;
-		left: 0;
-		width: 100%;
-		height: 100%;
-		background-color: var(--clr-primary);
-		opacity: 0.3;
-	}
+  .selectAvatar {
+    height: 20px;
+    width: 20px;
+    border-radius: var(--radius-full);
+    border: 2px solid var(--clr-white);
+    background: transparent;
+    display: none;
+    position: absolute;
+    top: 1rem;
+    right: 1rem;
+  }
+
+  &:hover .selectAvatar,
+  &.selected .selectAvatar {
+    display: block;
+  }
+
+  &.selected .selectAvatar {
+    background-color: var(--clr-primary);
+  }
+}
+
+.avatarButton {
+  margin-inline: auto;
+  margin-block-start: var(--space-lg);
+  padding: 0.25em 1em;
+  font-size: 1.5rem;
+  cursor: pointer;
+  outline: none;
+  transition: background-color 0.3s;
+  border: none;
+  font-family: "Natron";
+  letter-spacing: 1px;
+  background-color: var(--clr-accent);
+  display: block;
+
+  &:disabled {
+    cursor: not-allowed;
+  }
+
+  &:not(:disabled):hover {
+    background-color: color-mix(in oklab, var(--clr-accent), black 5%);
+  }
 }
