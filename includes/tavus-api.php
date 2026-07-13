@@ -16,35 +16,25 @@ class Tavus_API
     public function fetchVideos(WP_REST_Request $request)
     {
         $faceId = $request->get_param('face_id');
-        /* $track = $request->get_param('track'); */
+        $track = $request->get_param('track');
 
-        $response = wp_remote_get("{$this->baseUrl}/videos", [
-            'headers' => [
-                'x-api-key' => $this->apiKey,
-            ],
-        ]);
-
-        if (is_wp_error($response)) {
-            throw new \RuntimeException($response->get_error_message());
+        if (empty($faceId)) {
+            throw new \InvalidArgumentException("Face ID is required");
         }
 
-        $body = json_decode(wp_remote_retrieve_body($response), true);
-
-        $videos = $body['data'] ?? [];
+        $videos = $this->getCachedData('tavus_videos_all', 'videos');
 
         if (count($videos) === 0) {
             return [];
         }
 
-        $filteredVideos = [];
-
-        foreach ($videos as $video) {
-            if ($video['replica_id'] === $faceId) {
-                $filteredVideos[] = $video;
-            }
+        // If no track is passed, return all videos filtered by avatar
+        if (empty($track)) {
+            return $this->filterByFaceId($videos, $faceId);
         }
 
-        return $filteredVideos;
+        // Else, filter videos by avatar and track
+        return $this->filterByTrackAndFaceId($videos, $faceId, $track);
     }
 
     public function fetchVideo(WP_REST_Request $request)
@@ -73,24 +63,77 @@ class Tavus_API
 
         $queryString = implode(',', $faceIds);
 
-        $response = wp_remote_get("{$this->baseUrl}/faces?face_ids={$queryString}", [
-            'headers' => [
-                'x-api-key' => $this->apiKey
-            ]
-        ]);
+        $path = "faces?face_ids={$queryString}";
+        $cacheKey = "tavus_faces_" . md5($queryString);
 
-        if (is_wp_error($response)) {
-            throw new \RuntimeException($response->get_error_message());
-        }
+        $faces = $this->getCachedData($cacheKey, $path);
 
-        $body = json_decode(wp_remote_retrieve_body($response), true);
-
-        return $body['data'] ?? [];
+        return $faces;
     }
 
     private function getFaceIds()
     {
         //TODO: Replace with fetching avatar face ids from admin page when built
         return ['r3f427f43c9d', 'r4ba1277e4fb'];
+    }
+
+    private function getCachedData(string $cacheKey, string $endpoint)
+    {
+        $data = get_transient($cacheKey);
+
+        if (!$data) {
+            $response = wp_remote_get("{$this->baseUrl}/{$endpoint}", [
+                'headers' => [
+                    'x-api-key' => $this->apiKey,
+                ],
+            ]);
+
+            if (is_wp_error($response)) {
+                throw new \RuntimeException($response->get_error_message());
+            }
+
+            $body = json_decode(wp_remote_retrieve_body($response), true);
+            $data = $body['data'] ?? [];
+
+            set_transient($cacheKey, $data, 6 * HOUR_IN_SECONDS);
+        }
+
+        return $data;
+    }
+
+    private function filterByFaceId(array $videos, string $faceId)
+    {
+        $result = [];
+
+        foreach ($videos as $video) {
+            if ($video['replica_id'] === $faceId) {
+                $result[] = $video;
+            }
+        }
+
+        return $result;
+    }
+
+    private function filterByTrackAndFaceId(array $videos, string $faceId, string $track)
+    {
+        $result = [];
+
+        foreach ($videos as $video) {
+            $videoTrack = $this->extractTrack($video['video_name']);
+
+            if (($video['replica_id'] ?? null) === $faceId && ($videoTrack === $track)) {
+                $result[] = $video;
+            }
+        }
+
+        return $result;
+    }
+
+    private function extractTrack(string $title)
+    {
+        if (preg_match('/^\[(parent-caregiver|healthcare-provider)\]/i', $title, $matches)) {
+            return strtolower($matches[1]);
+        }
+        return null;
     }
 }

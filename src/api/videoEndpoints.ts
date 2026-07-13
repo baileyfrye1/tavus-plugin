@@ -1,9 +1,12 @@
 import { API_BASE } from "./config";
 
-export async function fetchVideos(faceId: string) {
-  const res = await fetch(`${API_BASE}/videos?face_id=${faceId}`, {
-    method: "GET",
-  });
+export async function fetchVideos(faceId: string, track?: string) {
+  const res = await fetch(
+    `${API_BASE}/videos?face_id=${faceId}${track ? `&track=${track}` : ""}`,
+    {
+      method: "GET",
+    },
+  );
 
   if (!res.ok) {
     throw new Error("Failed to fetch videos");

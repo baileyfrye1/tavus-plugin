@@ -22,6 +22,7 @@ function AvatarPicker({ onSelect }: AvatarPickerProps) {
   } = useQuery<Face[]>({
     queryKey: ["faces"],
     queryFn: () => fetchFaces(),
+    staleTime: 1000 * 60 * 15,
   });
 
   if (isLoading) {

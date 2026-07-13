@@ -10,13 +10,16 @@ type ModuleGridProps = {
 };
 
 function ModuleGrid({ answers }: ModuleGridProps) {
+  const track = answers.topic;
+
   const {
     data: videos,
     isLoading,
     isError,
   } = useQuery<Video[]>({
-    queryKey: ["videos"],
-    queryFn: () => fetchVideos(answers.avatar),
+    queryKey: ["videos", answers.avatar, track],
+    queryFn: () => fetchVideos(answers.avatar, track),
+    staleTime: 1000 * 60 * 15,
   });
 
   if (isLoading) {
@@ -32,16 +35,23 @@ function ModuleGrid({ answers }: ModuleGridProps) {
       {videos.length === 0 ? (
         <h3>No videos found with that avatar</h3>
       ) : (
-        videos.map((video) => (
-          <div className={styles.learningModuleWrapper}>
-            <img
-              src={video.still_image_thumbnail_url}
-              alt={`Learning module ${video.video_name}`}
-              className={styles.learningModule}
-            />
-            <h3 className={styles.learningModuleTitle}>{video.video_name}</h3>
-          </div>
-        ))
+        videos.map((video) => {
+          const videoTitle = video.video_name.replace(
+            /^\[(parent-caregiver|healthcare-provider)\]/g,
+            "",
+          );
+
+          return (
+            <div className={styles.learningModuleWrapper}>
+              <img
+                src={video.still_image_thumbnail_url}
+                alt={`Learning module ${videoTitle}`}
+                className={styles.learningModule}
+              />
+              <h3 className={styles.learningModuleTitle}>{videoTitle}</h3>
+            </div>
+          );
+        })
       )}
     </div>
   );

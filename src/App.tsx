@@ -8,6 +8,7 @@ export type OnboardingStage = "questions" | "avatar" | "library";
 
 function App() {
   const [stage, setStage] = useState<OnboardingStage>("questions");
+  const [answers, setAnswers] = useState<Record<string, string>>({});
 
   const stageText: Record<
     OnboardingStage,
@@ -41,18 +42,30 @@ function App() {
           <button
             aria-label="Reset learning module selection process"
             onClick={() => {
+              setAnswers({});
               setStage("questions");
             }}
             className={styles.resetBtn}
           >
             <RotateCcw />
           </button>
-          <p className={styles.viewAll} onClick={() => setStage("library")}>
+          <p
+            className={styles.viewAll}
+            onClick={() => {
+              setAnswers({});
+              setStage("avatar");
+            }}
+          >
             View All
           </p>
         </div>
       </div>
-      <OnboardingFlow stage={stage} setStage={setStage} />
+      <OnboardingFlow
+        stage={stage}
+        setStage={setStage}
+        answers={answers}
+        setAnswers={setAnswers}
+      />
     </div>
   );
 }

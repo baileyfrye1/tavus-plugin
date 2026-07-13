@@ -24,11 +24,11 @@ class Tavus_Rest_Controller
 					'type' => 'string',
 					'sanitize_callback' => 'sanitize_text_field',
 				],
-				/* 'track' => [ */
-				/* 	'required' => true, */
-				/* 	'type' => 'string', */
-				/* 	'sanitize_callback' => 'sanitize_text_field', */
-				/* ], */
+				'track' => [
+					'required' => false,
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_text_field',
+				],
 			]
 		]);
 
