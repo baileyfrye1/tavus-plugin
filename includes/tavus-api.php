@@ -24,17 +24,25 @@ class Tavus_API
 
         $videos = $this->getCachedData('tavus_videos_all', 'videos');
 
-        if (count($videos) === 0) {
+        $filteredVideos = [];
+
+        foreach ($videos as $video) {
+            if (($video['status'] ?? null) !== 'generating') {
+                $filteredVideos[] = $video;
+            }
+        }
+
+        if (count($filteredVideos) === 0) {
             return [];
         }
 
         // If no track is passed, return all videos filtered by avatar
         if (empty($track)) {
-            return $this->filterByFaceId($videos, $faceId);
+            return $this->filterByFaceId($filteredVideos, $faceId);
         }
 
         // Else, filter videos by avatar and track
-        return $this->filterByTrackAndFaceId($videos, $faceId, $track);
+        return $this->filterByTrackAndFaceId($filteredVideos, $faceId, $track);
     }
 
     public function fetchVideo(WP_REST_Request $request)
