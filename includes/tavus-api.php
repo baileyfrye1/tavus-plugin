@@ -62,9 +62,11 @@ class Tavus_API
         return json_decode(wp_remote_retrieve_body($response), true);
     }
 
-    public function fetchFaces()
+    public function fetchFaces(WP_REST_Request $request)
     {
-        $faceIds = $this->getFaceIds();
+        $track = $request->get_param('track');
+
+        $faceIds = $this->getFaceIds($track);
         if (empty($faceIds)) {
             return [];
         }
@@ -79,10 +81,17 @@ class Tavus_API
         return $faces;
     }
 
-    private function getFaceIds()
+    private function getFaceIds(?string $track = null)
     {
         //TODO: Replace with fetching avatar face ids from admin page when built
-        return ['r3f427f43c9d', 'r4ba1277e4fb'];
+        $parentAvatars = ['r3f427f43c9d', 'r4ba1277e4fb'];
+        $healthcareAvatars = ['r621a6013477', 'rd3ba0f30551'];
+
+        return match ($track) {
+            'parent-caregiver' => $parentAvatars,
+            'healthcare-provider' => $healthcareAvatars,
+            default => array_merge($parentAvatars, $healthcareAvatars)
+        };
     }
 
     private function getCachedData(string $cacheKey, string $endpoint)
@@ -103,7 +112,7 @@ class Tavus_API
             $body = json_decode(wp_remote_retrieve_body($response), true);
             $data = $body['data'] ?? [];
 
-            set_transient($cacheKey, $data, 6 * HOUR_IN_SECONDS);
+            set_transient($cacheKey, $data, 1 * HOUR_IN_SECONDS);
         }
 
         return $data;

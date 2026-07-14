@@ -58,7 +58,14 @@ class Tavus_Rest_Controller
 		register_rest_route('tavus/v1', '/faces', [
 			'methods' => 'GET',
 			'permission_callback' => '__return_true',
-			'callback' => [$this->api, 'fetchFaces']
+			'callback' => [$this->api, 'fetchFaces'],
+			'args' => [
+				'track' => [
+					'required' => false,
+					'type' => 'string',
+					'sanitize_callback' => 'sanitize_text_field'
+				]
+			]
 		]);
 	}
 }

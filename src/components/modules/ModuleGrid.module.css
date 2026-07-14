@@ -4,7 +4,9 @@
   padding: var(--space-sm) var(--space-sm) var(--space-xl);
   background-color: var(--clr-white);
   cursor: pointer;
-  transition: box-shadow 0.3s;
+  transition:
+    box-shadow 0.3s,
+    transform 0.2s;
 
   .learningModule {
     display: block;
@@ -19,6 +21,7 @@
   }
 
   &:hover {
-    box-shadow: 5px 5px 20px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 18px 40px -28px rgba(15, 27, 53, 0.5);
+    transform: translateY(-2px);
   }
 }
