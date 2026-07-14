@@ -29,6 +29,7 @@ function OnboardingFlow({
     case "avatar":
       return (
         <AvatarPicker
+          answers={answers}
           onSelect={(avatarId) => {
             setAnswers((prev) => ({ ...prev, avatar: avatarId }));
             setStage("library");

@@ -8,20 +8,22 @@ import SkeletonGrid from "../SkeletonGrid";
 
 type AvatarPickerProps = {
   onSelect: (avatarId: string) => void;
+  answers: Record<string, string>;
 };
 
-function AvatarPicker({ onSelect }: AvatarPickerProps) {
+function AvatarPicker({ onSelect, answers }: AvatarPickerProps) {
   const [selectedAvatarId, setSelectedAvatarId] = useState<string | undefined>(
     undefined,
   );
+  const track = answers.topic;
 
   const {
     data: faces,
     isLoading,
     isError,
   } = useQuery<Face[]>({
-    queryKey: ["faces"],
-    queryFn: () => fetchFaces(),
+    queryKey: ["faces", track],
+    queryFn: () => fetchFaces(track),
     staleTime: 1000 * 60 * 15,
   });
 
