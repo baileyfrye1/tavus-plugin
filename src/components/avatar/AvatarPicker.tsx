@@ -40,6 +40,7 @@ function AvatarPicker({ onSelect, answers }: AvatarPickerProps) {
       <div className={globalStyles.avatarGrid}>
         {faces.map((face) => (
           <div
+            key={face.face_id}
             className={`${styles.avatarWrapper} ${selectedAvatarId === face.face_id ? styles.selected : ""}`}
             onClick={() => {
               if (selectedAvatarId === face.face_id) {

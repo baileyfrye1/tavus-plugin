@@ -1,34 +1,55 @@
-# React + TypeScript + Vite
+# Tavus Integration
 
-This template provides a minimal setup to get React working in Vite with HMR and some Oxlint rules.
+WordPress plugin integrating Tavus AI avatar videos into a guided learning experience.
 
-Currently, two official plugins are available:
+## Setup
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+1. Activate plugin
+2. Add `[tavus_integration]` shortcode to a page
+3. Define API key in `wp-config.php`:
+   ```php
+   define('TAVUS_API_KEY', 'your-key');
+   ```
+4. Update face IDs in `includes/tavus-api.php::getFaceIds()`
 
-## React Compiler
+## Commands
 
-The React Compiler is enabled on this template. See [this documentation](https://react.dev/learn/react-compiler) for more information.
+| Command | Description |
+|---|---|
+| `pnpm dev` | Dev server with HMR |
+| `pnpm build` | Type-check + build to `dist/` |
+| `pnpm lint` | oxlint |
 
-Note: This will impact Vite dev & build performances.
+## Video Naming Convention
 
-## Expanding the Oxlint configuration
+Must start with a track prefix in brackets:
 
-If you are developing a production application, we recommend enabling type-aware lint rules by installing `oxlint-tsgolint` and editing `.oxlintrc.json`:
+- `[parent-caregiver] Title`
+- `[healthcare-provider] Title`
 
-```json
-{
-  "$schema": "./node_modules/oxlint/configuration_schema.json",
-  "plugins": ["react", "typescript", "oxc"],
-  "options": {
-    "typeAware": true
-  },
-  "rules": {
-    "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }]
-  }
-}
-```
+The prefix is stripped from display titles.
 
-See the [Oxlint rules documentation](https://oxc.rs/docs/guide/usage/linter/rules) for the full list of rules and categories.
+## Caching
+
+| Layer | TTL |
+|---|---|
+| WordPress transient (PHP -> Tavus) | 1 hour |
+| React Query (browser -> WordPress) | 15 min |
+
+## REST Endpoints
+
+All under `tavus/v1`, publicly accessible.
+
+| Route | Params | Returns |
+|---|---|---|
+| `GET /faces` | `?track=` (optional) | Avatar faces filtered by track, or all |
+| `GET /videos` | `?face_id=` (required), `?track=` (optional) | Videos for face, optionally by track |
+| `GET /video/{id}` | `videoId` (path), `?face_id=` | Single video |
+
+Generating videos are filtered out.
+
+## TODO
+
+- Replace hardcoded face IDs with admin settings page
+- Add cache invalidation endpoint
+- HLS.js support via `stream_url`

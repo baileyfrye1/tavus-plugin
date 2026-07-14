@@ -7,8 +7,8 @@ type SkeletonGridProps = {
 function SkeletonGrid({ length = 3 }: SkeletonGridProps) {
   return (
     <div className={globalStyles.avatarGrid}>
-      {Array.from({ length: length }).map(() => (
-        <div className={globalStyles.skeleton}></div>
+      {Array.from({ length }).map((_, i) => (
+        <div className={globalStyles.skeleton} key={i}></div>
       ))}
     </div>
   );
