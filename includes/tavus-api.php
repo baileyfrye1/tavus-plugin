@@ -81,6 +81,24 @@ class Tavus_API
         return $faces;
     }
 
+    public function invalidateTransients()
+    {
+        delete_transient('tavus_videos_all');
+
+        $tracks = ['parent-caregiver', 'healthcare-provider', null];
+
+        foreach ($tracks as $track) {
+            $faceIds = $this->getFaceIds($track);
+
+            if (!empty($faceIds)) {
+                $key = 'tavus_faces_' . md5(implode(',', $faceIds));
+                delete_transient($key);
+            }
+        }
+
+        return ['success' => true, 'message' => 'All transients cleared'];
+    }
+
     private function getFaceIds(?string $track = null)
     {
         //TODO: Replace with fetching avatar face ids from admin page when built
