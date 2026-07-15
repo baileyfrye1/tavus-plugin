@@ -68,3 +68,12 @@
     background-color: color-mix(in oklab, var(--clr-accent), black 5%);
   }
 }
+
+/* TEMPORARY */
+.inactive {
+  cursor: not-allowed;
+}
+
+.inactive .avatar {
+  pointer-events: none;
+}
