@@ -5,8 +5,11 @@ export type Question = {
   id: string;
   text: string;
   options: { value: string; label: string }[];
-  track?: UserType;
+  track: UserType;
 };
+
+export type AnswersType = Record<string, string> &
+  Partial<{ topic: UserType; avatar: string }>;
 
 // API Responses
 export type Face = {

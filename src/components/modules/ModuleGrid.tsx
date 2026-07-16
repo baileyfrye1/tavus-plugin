@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 import { fetchVideos } from "../../api/videoEndpoints";
-import type { Video } from "../../types";
+import type { AnswersType, Video } from "../../types";
 import SkeletonGrid from "../SkeletonGrid";
 import globalStyles from "../../GlobalStyles.module.css";
 import styles from "./ModuleGrid.module.css";
@@ -8,7 +8,7 @@ import { useState, useEffect, useRef } from "react";
 import { X } from "lucide-react";
 
 type ModuleGridProps = {
-  answers: Record<string, string>;
+  answers: AnswersType;
 };
 
 function ModuleGrid({ answers }: ModuleGridProps) {
@@ -22,7 +22,7 @@ function ModuleGrid({ answers }: ModuleGridProps) {
     isError,
   } = useQuery<Video[]>({
     queryKey: ["videos", answers.avatar, track],
-    queryFn: () => fetchVideos(answers.avatar, track),
+    queryFn: () => fetchVideos(answers.avatar!, track),
     staleTime: 1000 * 60 * 15,
   });
 

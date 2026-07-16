@@ -3,17 +3,23 @@ import styles from "./App.module.css";
 import globalStyles from "./GlobalStyles.module.css";
 import OnboardingFlow from "./components/OnboardingFlow";
 import { RotateCcw } from "lucide-react";
+import type { AnswersType } from "./types";
 
-export type OnboardingStage = "questions" | "avatar" | "library";
+export type OnboardingStage = "topic" | "questions" | "avatar" | "library";
 
 function App() {
-  const [stage, setStage] = useState<OnboardingStage>("questions");
-  const [answers, setAnswers] = useState<Record<string, string>>({});
+  const [stage, setStage] = useState<OnboardingStage>("topic");
+  const [answers, setAnswers] = useState<AnswersType>({});
 
   const stageText: Record<
     OnboardingStage,
     Record<"heading" | "eyebrow", string>
   > = {
+    topic: {
+      heading: "Choose Your Learning Module Topic",
+      eyebrow:
+        "Select which path you would like to view learning modules about",
+    },
     questions: {
       heading: "Find Your Learning Modules",
       eyebrow:
@@ -43,7 +49,7 @@ function App() {
             aria-label="Reset learning module selection process"
             onClick={() => {
               setAnswers({});
-              setStage("questions");
+              setStage("topic");
             }}
             className={styles.resetBtn}
           >

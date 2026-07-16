@@ -2,13 +2,13 @@ import { useQuery } from "@tanstack/react-query";
 import styles from "./AvatarPicker.module.css";
 import globalStyles from "../../GlobalStyles.module.css";
 import { fetchFaces } from "../../api/faceEndpoints";
-import { type Face } from "../../types";
+import { type AnswersType, type Face } from "../../types";
 import { useState } from "react";
 import SkeletonGrid from "../SkeletonGrid";
 
 type AvatarPickerProps = {
   onSelect: (avatarId: string) => void;
-  answers: Record<string, string>;
+  answers: AnswersType;
 };
 
 function AvatarPicker({ onSelect, answers }: AvatarPickerProps) {

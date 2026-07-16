@@ -1,0 +1,6 @@
+.topicGrid {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  place-items: center;
+  margin-block-start: var(--space-2xl);
+}
