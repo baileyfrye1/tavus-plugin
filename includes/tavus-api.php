@@ -65,7 +65,22 @@ class Tavus_API
     public function fetchFaces(WP_REST_Request $request)
     {
         $track = $request->get_param('track');
+        $faceId = $request->get_param('face_id');
 
+        if ($faceId) {
+            $cacheKey = "tavus_face_" . md5($faceId);
+            return $this->getCachedData($cacheKey, "faces?face_ids={$faceId}");
+        }
+
+        if (empty($track)) {
+            $track = "";
+        }
+
+        return $this->fetchFacesByTrack($track);
+    }
+
+    public function fetchFacesByTrack(string $track = ''): array
+    {
         $faceIds = $this->getFaceIds($track);
         if (empty($faceIds)) {
             return [];
@@ -76,9 +91,7 @@ class Tavus_API
         $path = "faces?face_ids={$queryString}";
         $cacheKey = "tavus_faces_" . md5($queryString);
 
-        $faces = $this->getCachedData($cacheKey, $path);
-
-        return $faces;
+        return $this->getCachedData($cacheKey, $path);
     }
 
     public function invalidateTransients()
@@ -103,8 +116,11 @@ class Tavus_API
     {
         //TODO: Replace with fetching avatar face ids from admin page when built
         // First two parent avatar ids stay, everything else is temporary right now
-        $parentAvatars = ['r3f427f43c9d', 'r4ba1277e4fb', 'r1d7cf9edbb4', 'r1a0108fbd75', 'r90bbd427f71', 'rfc63eab317e', 'rdd4c86e5e1a', 'rb43357fb2ee'];
-        $healthcareAvatars = ['r621a6013477', 'rd3ba0f30551'];
+        $settings = get_option('tavus_face_settings', []);
+        $faceIds = $settings['face_ids'] ?? [];
+
+        $parentAvatars = $faceIds['parent-caregiver'] ?? [];
+        $healthcareAvatars = $faceIds['healthcare-provider'] ?? [];
 
         return match ($track) {
             'parent-caregiver' => $parentAvatars,
@@ -131,7 +147,10 @@ class Tavus_API
             $body = json_decode(wp_remote_retrieve_body($response), true);
             $data = $body['data'] ?? [];
 
-            set_transient($cacheKey, $data, 1 * HOUR_IN_SECONDS);
+            $settings = get_option('tavus_general_settings', []);
+            $cacheTTL = (int) ($settings['cache_ttl'] ?? 1) * HOUR_IN_SECONDS;
+
+            set_transient($cacheKey, $data, $cacheTTL);
         }
 
         return $data;

@@ -1,0 +1,57 @@
+.tavus-admin-wrapper {
+  padding: 2rem;
+}
+
+.api-key {
+  width: 40ch;
+}
+
+.faces-grid {
+  margin-top: 2rem;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 1rem;
+}
+
+.face-name {
+  display: block;
+  font-weight: bold;
+  margin: 0.5rem 0 0 0.5rem;
+}
+
+.video-wrapper {
+  position: relative;
+}
+
+.remove-face {
+  background-color: red;
+  padding: 0.5em;
+  color: #fff;
+  position: absolute;
+  top: 0.5rem;
+  right: 0.5rem;
+  outline: none;
+  border: none;
+  cursor: pointer;
+  transition: background-color 0.2s;
+
+  &:hover {
+    background-color: color-mix(in oklab, red, black 5%);
+  }
+}
+
+.wrap {
+  margin: 1em 0;
+}
+
+.temp {
+  height: 290px;
+  width: 515px;
+  background-color: gray;
+  position: relative;
+}
+
+.cache-status {
+  display: block;
+  margin-block-start: 0.5rem;
+}

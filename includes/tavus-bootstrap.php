@@ -6,6 +6,7 @@ class Tavus_Bootstrap
     {
         require_once __DIR__ . '/tavus-api.php';
         require_once __DIR__ . '/tavus-rest.php';
+        require_once __DIR__ . '/tavus-admin.php';
 
         add_shortcode('tavus_integration', [$this, 'registerShortcode']);
         add_action('wp_enqueue_scripts', [$this, 'enqueueAssets']);
@@ -37,14 +38,18 @@ class Tavus_Bootstrap
         if (isset($manifest['src/main.tsx'])) {
             $entry = $manifest['src/main.tsx'];
             $base = plugin_dir_url(__DIR__) . 'dist';
-
             if (!empty($entry['css'])) {
                 foreach ($entry['css'] as $cssFile) {
                     wp_enqueue_style('tavus-' . sanitize_title($cssFile), "{$base}/{$cssFile}");
                 }
             }
-
             wp_enqueue_script('tavus-app', "{$base}/{$entry['file']}", [], null, true);
+            add_filter('script_loader_tag', function ($tag, $handle, $src) {
+                if ('tavus-app' === $handle) {
+                    return '<script type="module" src="' . esc_url($src) . '"></script>';
+                }
+                return $tag;
+            }, 10, 3);
         }
     }
 }
