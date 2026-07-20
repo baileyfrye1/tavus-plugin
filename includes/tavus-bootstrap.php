@@ -39,14 +39,14 @@ class Tavus_Bootstrap
             $entry = $manifest['src/main.tsx'];
             $base = plugin_dir_url(__DIR__) . 'dist';
 
-            if (!empty($entry['css'])) {
-                foreach ($entry['css'] as $cssFile) {
-                    wp_enqueue_style('tavus-' . sanitize_title($cssFile), "{$base}/{$cssFile}");
-                }
+            if (isset($manifest['style.css'])) {
+                wp_enqueue_style(
+                    'tavus-style',
+                    esc_url("{$base}/{$manifest['style.css']['file']}")
+                );
             }
 
             wp_enqueue_script('tavus-app', "{$base}/{$entry['file']}", [], null, true);
-
             add_filter('script_loader_tag', function ($tag, $handle, $src) {
                 if ('tavus-app' === $handle) {
                     return '<script type="module" src="' . esc_url($src) . '"></script>';

@@ -9,6 +9,7 @@ export default defineConfig({
   build: {
     outDir: "dist",
     manifest: true,
+    cssCodeSplit: false,
     rolldownOptions: {
       input: {
         main: "src/main.tsx",

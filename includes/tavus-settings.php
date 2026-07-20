@@ -34,10 +34,10 @@ if (file_exists($manifestPath)) {
         $entry = $manifest['src/admin.tsx'];
         $base  = plugin_dir_url(__DIR__) . 'dist';
 
-        foreach ($entry['css'] as $cssFile) {
+        if (isset($manifest['style.css'])) {
             wp_enqueue_style(
-                'tavus-admin-' . sanitize_title($cssFile),
-                "{$base}/{$cssFile}"
+                'tavus-admin-style',
+                esc_url("{$base}/{$manifest['style.css']['file']}")
             );
         }
 
@@ -54,7 +54,6 @@ if (file_exists($manifestPath)) {
             }
             return $tag;
         }, 10, 3);
-
         // 3. Localize data into the script
         wp_localize_script('tavus-admin', 'tavusSettings', [
             'data'  => $settings,

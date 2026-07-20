@@ -19,7 +19,7 @@ class Tavus_Admin
             'manage_options',
             'tavus-settings',
             [$this, 'renderPage'],
-            'dashicons-video-alt3',
+            'dashicons-admin-users',
             30
         );
     }
