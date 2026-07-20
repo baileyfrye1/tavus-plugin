@@ -33,7 +33,9 @@ class Tavus_Admin
 
     public function registerSettings()
     {
-        register_setting('tavus_settings', 'tavus_settings', [$this, 'sanitizeSettings']);
+        register_setting('tavus_general', 'tavus_general_settings', [$this, 'sanitizeGeneralSettings']);
+        register_setting('tavus_faces', 'tavus_face_settings', [$this, 'sanitizeFaceSettings']);
+        register_setting('tavus_tools', 'tavus_tool_settings', [$this, 'sanitizeToolSettings']);
 
         add_settings_section('tavus_general', 'General', null, 'tavus-general');
         add_settings_field('api_key', 'API Key', [$this, 'renderApiKeyField'], 'tavus-general', 'tavus_general');
@@ -45,7 +47,17 @@ class Tavus_Admin
         add_settings_section('tavus_tools', 'Tools', null, 'tavus-tools');
     }
 
-    private function sanitizeSettings()
+    private function sanitizeGeneralSettings()
+    {
+        $testVar = "";
+    }
+
+    private function sanitizeFaceSettings()
+    {
+        $testVar = "";
+    }
+
+    private function sanitizeToolSettings()
     {
         $testVar = "";
     }
@@ -56,7 +68,7 @@ class Tavus_Admin
         $apiKey = $settings['api_key'] ?? "";
 ?>
         <label for="api-key">Api Key:</label>
-        <input type="text" name="tavus_settings[api_key]" value="<?= esc_attr($apiKey) ?>" />
+        <input type="text" name="tavus_general_settings[api_key]" value="<?= esc_attr($apiKey) ?>" />
     <?php }
 
     public function renderParentFacesField()
@@ -73,7 +85,7 @@ class Tavus_Admin
 
         <div>
             <?php foreach ($faceIds as $faceId) : ?>
-                <input type="hidden" name="tavus_settings[face_ids][parent-caregiver][]" value="<?php echo esc_attr($faceId); ?>" />
+                <input type="hidden" name="tavus_face_settings[face_ids][parent-caregiver][]" value="<?php echo esc_attr($faceId); ?>" />
                 <span><?= esc_html($faceId) ?></span>
             <?php endforeach ?>
         </div>
@@ -93,12 +105,13 @@ class Tavus_Admin
 
         <div>
             <?php foreach ($faceIds as $faceId) : ?>
-                <input type="hidden" name="tavus_settings[face_ids][parent-caregiver][]" value="<?php echo esc_attr($faceId); ?>" />
+                <input type="hidden" name="tavus_face_settings[face_ids][healthcare-provider][]" value="<?php echo esc_attr($faceId); ?>" />
                 <span><?= esc_html($faceId) ?></span>
             <?php endforeach ?>
         </div>
 <?php }
 
+    // TODO: Refactor this function to conditionally return the correct fields based on the settings group
     private function getSettings(): array
     {
         $settings = [

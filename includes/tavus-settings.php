@@ -31,11 +31,29 @@ $settingsSection = match ($activeTab) {
         <?php endforeach ?>
     </nav>
 
-    <form action="options.php" method="post">
-        <?php
-        settings_fields('tavus_settings');
-        do_settings_sections($settingsSection);
-        submit_button();
-        ?>
-    </form>
+    <?php if ($activeTab === 'faces') : ?>
+        <form action="options.php" method="post">
+            <?php
+            settings_fields('tavus_faces');
+            do_settings_sections($settingsSection);
+            submit_button();
+            ?>
+        </form>
+    <?php elseif ($activeTab === 'tools') : ?>
+        <form action="options.php" method="post">
+            <?php
+            settings_fields('tavus_tools');
+            do_settings_sections($settingsSection);
+            submit_button();
+            ?>
+        </form>
+    <?php else : ?>
+        <form action="options.php" method="post">
+            <?php
+            settings_fields('tavus_general');
+            do_settings_sections($settingsSection);
+            submit_button();
+            ?>
+        </form>
+    <?php endif ?>
 </div>
