@@ -103,8 +103,14 @@ class Tavus_API
     {
         //TODO: Replace with fetching avatar face ids from admin page when built
         // First two parent avatar ids stay, everything else is temporary right now
-        $parentAvatars = ['r3f427f43c9d', 'r4ba1277e4fb', 'r1d7cf9edbb4', 'r1a0108fbd75', 'r90bbd427f71', 'rfc63eab317e', 'rdd4c86e5e1a', 'rb43357fb2ee'];
-        $healthcareAvatars = ['r621a6013477', 'rd3ba0f30551'];
+        $settings = get_option('tavus_settings', []);
+        $faceIds = $settings['face_ids'] ?? [];
+
+        /* $parentAvatars = ['r3f427f43c9d', 'r4ba1277e4fb', 'r1d7cf9edbb4', 'r1a0108fbd75', 'r90bbd427f71', 'rfc63eab317e', 'rdd4c86e5e1a', 'rb43357fb2ee']; */
+        /* $healthcareAvatars = ['r621a6013477', 'rd3ba0f30551']; */
+
+        $parentAvatars = $faceIds['parent-caregiver'] ?? [];
+        $healthcareAvatars = $faceIds['healthcare-provider'] ?? [];
 
         return match ($track) {
             'parent-caregiver' => $parentAvatars,
