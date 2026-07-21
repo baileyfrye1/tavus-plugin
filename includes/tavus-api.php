@@ -103,7 +103,7 @@ class Tavus_API
     {
         //TODO: Replace with fetching avatar face ids from admin page when built
         // First two parent avatar ids stay, everything else is temporary right now
-        $settings = get_option('tavus_settings', []);
+        $settings = get_option('tavus_face_settings', []);
         $faceIds = $settings['face_ids'] ?? [];
 
         /* $parentAvatars = ['r3f427f43c9d', 'r4ba1277e4fb', 'r1d7cf9edbb4', 'r1a0108fbd75', 'r90bbd427f71', 'rfc63eab317e', 'rdd4c86e5e1a', 'rb43357fb2ee']; */
@@ -137,7 +137,10 @@ class Tavus_API
             $body = json_decode(wp_remote_retrieve_body($response), true);
             $data = $body['data'] ?? [];
 
-            set_transient($cacheKey, $data, 1 * HOUR_IN_SECONDS);
+            $settings = get_option('tavus_general_settings', []);
+            $cacheTTL = (int) ($settings['cache_ttl'] ?? 1) * HOUR_IN_SECONDS;
+
+            set_transient($cacheKey, $data, $cacheTTL);
         }
 
         return $data;

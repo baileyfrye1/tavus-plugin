@@ -4,6 +4,12 @@ if (!defined('ABSPATH')) {
     exit;
 }
 
+enum SettingsGroup: string
+{
+    case General = 'general';
+    case Faces = 'faces';
+}
+
 class Tavus_Admin
 {
     public function __construct()
@@ -35,45 +41,69 @@ class Tavus_Admin
     {
         register_setting('tavus_general', 'tavus_general_settings', [$this, 'sanitizeGeneralSettings']);
         register_setting('tavus_faces', 'tavus_face_settings', [$this, 'sanitizeFaceSettings']);
-        register_setting('tavus_tools', 'tavus_tool_settings', [$this, 'sanitizeToolSettings']);
 
         add_settings_section('tavus_general', 'General', null, 'tavus-general');
         add_settings_field('api_key', 'API Key', [$this, 'renderApiKeyField'], 'tavus-general', 'tavus_general');
+        add_settings_field('cache_ttl', 'Cache TTL', [$this, 'renderCacheTTLField'], 'tavus-general', 'tavus_general');
 
         add_settings_section('tavus_faces', 'Face IDs', null, 'tavus-faces');
         add_settings_field('face_ids_parent', 'Parent/Caregiver', [$this, 'renderParentFacesField'], 'tavus-faces', 'tavus_faces');
         add_settings_field('face_ids_healthcare', 'Healthcare Provider', [$this, 'renderHealthcareFacesField'], 'tavus-faces', 'tavus_faces');
-
-        add_settings_section('tavus_tools', 'Tools', null, 'tavus-tools');
     }
 
-    private function sanitizeGeneralSettings()
+    private function sanitizeGeneralSettings(array $input)
     {
-        $testVar = "";
+        $clean = [
+            'api_key' => '',
+            'cache_ttl' => 1
+        ];
+
+        if (!empty($input['api_key'])) {
+            $clean['api_key'] = sanitize_text_field($input['api_key']);
+        }
+
+        $ttl = (int) ($input['cache_ttl'] ?? 1);
+        $clean['cache_ttl'] = max(1, min(24, $ttl));
+
+        return $clean;
     }
 
-    private function sanitizeFaceSettings()
+    private function sanitizeFaceSettings(array $input)
     {
-        $testVar = "";
-    }
+        $clean = ['face_ids' => []];
 
-    private function sanitizeToolSettings()
-    {
-        $testVar = "";
+        foreach (['parent-caregiver', 'healthcare-provider'] as $track) {
+            $clean['face_ids'][$track] = [];
+            if (isset($input['face_ids'][$track]) && is_array($input['face_ids'][$track])) {
+                $clean['face_ids'][$track] = array_values(array_filter(array_map(
+                    'sanitize_text_field',
+                    $input['face_ids'][$track]
+                )));
+            }
+        }
+
+        return $clean;
     }
 
     public function renderApiKeyField()
     {
-        $settings = $this->getSettings();
+        $settings = $this->getSettings(SettingsGroup::General);
         $apiKey = $settings['api_key'] ?? "";
 ?>
-        <label for="api-key">Api Key:</label>
-        <input type="text" name="tavus_general_settings[api_key]" value="<?= esc_attr($apiKey) ?>" />
+        <input class="api-key" type="text" name="tavus_general_settings[api_key]" value="<?= esc_attr($apiKey) ?>" />
+    <?php }
+
+    public function renderCacheTTLField()
+    {
+        $settings = $this->getSettings(SettingsGroup::General);
+        $cacheTTL = $settings['cache_ttl'] ?? "";
+    ?>
+        <input class="api-key" type="number" placeholder="Please enter a number" min="1" max="24" name="tavus_general_settings[cache_ttl]" value="<?= esc_attr($cacheTTL) ?>" />
     <?php }
 
     public function renderParentFacesField()
     {
-        $settings = $this->getSettings();
+        $settings = $this->getSettings(SettingsGroup::Faces);
         $faceIds = $settings['face_ids']['parent-caregiver'] ?? [];
     ?>
         <h3>Parents/Caregivers</h3>
@@ -93,7 +123,7 @@ class Tavus_Admin
 
     public function renderHealthcareFacesField()
     {
-        $settings = $this->getSettings();
+        $settings = $this->getSettings(SettingsGroup::Faces);
         $faceIds = $settings['face_ids']['healthcare-provider'] ?? [];
     ?>
         <h3>Healthcare Providers</h3>
@@ -111,30 +141,40 @@ class Tavus_Admin
         </div>
 <?php }
 
-    // TODO: Refactor this function to conditionally return the correct fields based on the settings group
-    private function getSettings(): array
-    {
-        $settings = [
-            'api_key'   => defined('TAVUS_API_KEY') ? TAVUS_API_KEY : '',
-            'face_ids'  => [
-                'parent-caregiver'   => [
-                    'r3f427f43c9d',
-                    'r4ba1277e4fb',
-                    'r1d7cf9edbb4',
-                    'r1a0108fbd75',
-                    'r90bbd427f71',
-                    'rfc63eab317e',
-                    'rdd4c86e5e1a',
-                    'rb43357fb2ee',
-                ],
-                'healthcare-provider' => [
-                    'r621a6013477',
-                    'rd3ba0f30551',
-                ],
-            ],
-        ];
 
-        return get_option('tavus_settings', $settings);
+    private function getSettings(SettingsGroup $group): array
+    {
+        $default = match ($group) {
+            SettingsGroup::General => [
+                'api_key'   => defined('TAVUS_API_KEY') ? TAVUS_API_KEY : '',
+                'cache_ttl' => 1,
+            ],
+            SettingsGroup::Faces => [
+                'face_ids'  => [
+                    'parent-caregiver'   => [
+                        'r3f427f43c9d',
+                        'r4ba1277e4fb',
+                        'r1d7cf9edbb4',
+                        'r1a0108fbd75',
+                        'r90bbd427f71',
+                        'rfc63eab317e',
+                        'rdd4c86e5e1a',
+                        'rb43357fb2ee',
+                    ],
+                    'healthcare-provider' => [
+                        'r621a6013477',
+                        'rd3ba0f30551',
+                    ],
+                ],
+            ]
+        };
+
+        $option = match ($group) {
+            SettingsGroup::General => 'tavus_general_settings',
+            SettingsGroup::Faces => 'tavus_face_settings',
+        };
+
+        return get_option($option, $default);
     }
 
     public function enqueueAdminAssets(string $hook)

@@ -40,13 +40,10 @@ $settingsSection = match ($activeTab) {
             ?>
         </form>
     <?php elseif ($activeTab === 'tools') : ?>
-        <form action="options.php" method="post">
-            <?php
-            settings_fields('tavus_tools');
-            do_settings_sections($settingsSection);
-            submit_button();
-            ?>
-        </form>
+        <!-- TODO: Finish hooking up clear cache button -->
+        <div class="wrap">
+            <a href="" class="button button-primary">Clear Cache</a>
+        </div>
     <?php else : ?>
         <form action="options.php" method="post">
             <?php

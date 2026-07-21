@@ -1,3 +1,7 @@
 .tavus-admin-wrapper {
   padding: 2rem;
 }
+
+.api-key {
+  width: 40ch;
+}
