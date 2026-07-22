@@ -64,6 +64,11 @@ class Tavus_Rest_Controller
 					'required' => false,
 					'type' => 'string',
 					'sanitize_callback' => 'sanitize_text_field'
+				],
+				'face_id' => [
+					'required' => false,
+					'type' => 'string',
+					'santize_callback' => 'sanitize_text_field'
 				]
 			]
 		]);

@@ -125,7 +125,7 @@ class Tavus_Admin
                 $faceName = is_array($face) ? ($face['face_name'] ?? $faceId) : $faceId;
                 $thumbnailUrl = is_array($face) ? ($face['thumbnail_video_url'] ?? '') : '';
             ?>
-                <div class="face-card">
+                <div class="face-card" data-face-id="<?= $faceId ?>">
                     <input type="hidden" name="tavus_face_settings[face_ids][parent-caregiver][]" value="<?= esc_attr($faceId); ?>" />
                     <?php if ($thumbnailUrl) : ?>
                         <div class="video-wrapper">
@@ -161,7 +161,7 @@ class Tavus_Admin
                 $faceName = is_array($face) ? ($face['face_name'] ?? $faceId) : $faceId;
                 $thumbnailUrl = is_array($face) ? ($face['thumbnail_video_url'] ?? '') : '';
             ?>
-                <div class="face-card">
+                <div class="face-card" data-face-id="<?= $faceId ?>">
                     <input type="hidden" name="tavus_face_settings[face_ids][healthcare-provider][]" value="<?= esc_attr($faceId); ?>" />
                     <?php if ($thumbnailUrl) : ?>
                         <div class="video-wrapper">

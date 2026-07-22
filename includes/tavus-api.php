@@ -65,11 +65,21 @@ class Tavus_API
     public function fetchFaces(WP_REST_Request $request)
     {
         $track = $request->get_param('track');
+        $faceId = $request->get_param('face_id');
+
+        if ($faceId) {
+            $cacheKey = "tavus_face_" . md5($faceId);
+            return $this->getCachedData($cacheKey, "faces?face_ids={$faceId}");
+        }
+
+        if (empty($track)) {
+            $track = "";
+        }
 
         return $this->fetchFacesByTrack($track);
     }
 
-    public function fetchFacesByTrack(string $track): array
+    public function fetchFacesByTrack(string $track = ''): array
     {
         $faceIds = $this->getFaceIds($track);
         if (empty($faceIds)) {
