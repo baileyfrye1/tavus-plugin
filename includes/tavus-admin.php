@@ -12,11 +12,13 @@ enum SettingsGroup: string
 
 class Tavus_Admin
 {
+    private Tavus_API $api;
     public function __construct()
     {
         add_action('admin_menu', [$this, 'registerSettingsPage']);
         add_action('admin_init', [$this, 'registerSettings']);
         add_action('admin_enqueue_scripts', [$this, 'enqueueAdminAssets']);
+        $this->api = new Tavus_API();
     }
 
     public function registerSettingsPage()
@@ -103,40 +105,72 @@ class Tavus_Admin
 
     public function renderParentFacesField()
     {
-        $settings = $this->getSettings(SettingsGroup::Faces);
-        $faceIds = $settings['face_ids']['parent-caregiver'] ?? [];
+        $faces = [];
+
+        try {
+            $faces = $this->api->fetchFacesByTrack('parent-caregiver');
+        } catch (\Exception $e) {
+        }
     ?>
         <h3>Parents/Caregivers</h3>
 
         <div class="add-face">
             <input type="text" placeholder="Enter Face ID" />
-            <button type="button" class="button button-secondary">Add</button>
+            <button type="button" class="button button-secondary" data-track="parent-caregiver">Add</button>
         </div>
 
-        <div>
-            <?php foreach ($faceIds as $faceId) : ?>
-                <input type="hidden" name="tavus_face_settings[face_ids][parent-caregiver][]" value="<?php echo esc_attr($faceId); ?>" />
-                <span><?= esc_html($faceId) ?></span>
+        <div class="faces-grid">
+            <?php foreach ($faces as $face) :
+                $faceId = is_array($face) ? $face['face_id'] : $face;
+                $faceName = is_array($face) ? ($face['face_name'] ?? $faceId) : $faceId;
+                $thumbnailUrl = is_array($face) ? ($face['thumbnail_video_url'] ?? '') : '';
+            ?>
+                <div class="face-card">
+                    <input type="hidden" name="tavus_face_settings[face_ids][parent-caregiver][]" value="<?= esc_attr($faceId); ?>" />
+                    <?php if ($thumbnailUrl) : ?>
+                        <div class="video-wrapper">
+                            <video src="<?= esc_url($thumbnailUrl) ?>"></video>
+                            <button type="button" class="remove-face">X</button>
+                        </div>
+                    <?php endif ?>
+                    <span><?= esc_html($faceName) ?></span>
+                </div>
             <?php endforeach ?>
         </div>
     <?php }
 
     public function renderHealthcareFacesField()
     {
-        $settings = $this->getSettings(SettingsGroup::Faces);
-        $faceIds = $settings['face_ids']['healthcare-provider'] ?? [];
+        $faces = [];
+
+        try {
+            $faces = $this->api->fetchFacesByTrack('healthcare-provider');
+        } catch (\Exception $e) {
+        }
     ?>
         <h3>Healthcare Providers</h3>
 
         <div class="add-face">
             <input type="text" placeholder="Enter Face ID" />
-            <button type="button" class="button button-secondary">Add</button>
+            <button type="button" class="button button-secondary" data-track="healthcare-provider">Add</button>
         </div>
 
-        <div>
-            <?php foreach ($faceIds as $faceId) : ?>
-                <input type="hidden" name="tavus_face_settings[face_ids][healthcare-provider][]" value="<?php echo esc_attr($faceId); ?>" />
-                <span><?= esc_html($faceId) ?></span>
+        <div class="faces-grid">
+            <?php foreach ($faces as $face) :
+                $faceId = is_array($face) ? $face['face_id'] : $face;
+                $faceName = is_array($face) ? ($face['face_name'] ?? $faceId) : $faceId;
+                $thumbnailUrl = is_array($face) ? ($face['thumbnail_video_url'] ?? '') : '';
+            ?>
+                <div class="face-card">
+                    <input type="hidden" name="tavus_face_settings[face_ids][healthcare-provider][]" value="<?= esc_attr($faceId); ?>" />
+                    <?php if ($thumbnailUrl) : ?>
+                        <div class="video-wrapper">
+                            <video src="<?= esc_url($thumbnailUrl) ?>"></video>
+                            <button type="button" class="remove-face">X</button>
+                        </div>
+                    <?php endif ?>
+                    <span><?= esc_html($faceName) ?></span>
+                </div>
             <?php endforeach ?>
         </div>
 <?php }
@@ -183,7 +217,8 @@ class Tavus_Admin
             return;
         }
 
-        wp_enqueue_style('tavus-admin', plugin_dir_url(__FILE__) . 'admin.css');
+        wp_enqueue_style('tavus-admin', plugin_dir_url(__FILE__) . 'assets/admin.css');
+        wp_enqueue_script('tavus-admin', plugin_dir_url(__FILE__) . 'assets/admin.js', [], false, true);
     }
 }
 

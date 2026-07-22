@@ -66,6 +66,11 @@ class Tavus_API
     {
         $track = $request->get_param('track');
 
+        return $this->fetchFacesByTrack($track);
+    }
+
+    public function fetchFacesByTrack(string $track): array
+    {
         $faceIds = $this->getFaceIds($track);
         if (empty($faceIds)) {
             return [];
@@ -76,9 +81,7 @@ class Tavus_API
         $path = "faces?face_ids={$queryString}";
         $cacheKey = "tavus_faces_" . md5($queryString);
 
-        $faces = $this->getCachedData($cacheKey, $path);
-
-        return $faces;
+        return $this->getCachedData($cacheKey, $path);
     }
 
     public function invalidateTransients()
@@ -105,9 +108,6 @@ class Tavus_API
         // First two parent avatar ids stay, everything else is temporary right now
         $settings = get_option('tavus_face_settings', []);
         $faceIds = $settings['face_ids'] ?? [];
-
-        /* $parentAvatars = ['r3f427f43c9d', 'r4ba1277e4fb', 'r1d7cf9edbb4', 'r1a0108fbd75', 'r90bbd427f71', 'rfc63eab317e', 'rdd4c86e5e1a', 'rb43357fb2ee']; */
-        /* $healthcareAvatars = ['r621a6013477', 'rd3ba0f30551']; */
 
         $parentAvatars = $faceIds['parent-caregiver'] ?? [];
         $healthcareAvatars = $faceIds['healthcare-provider'] ?? [];
