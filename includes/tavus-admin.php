@@ -112,10 +112,10 @@ class Tavus_Admin
         } catch (\Exception $e) {
         }
     ?>
-        <h3>Parents/Caregivers</h3>
+        <h3>Add Parent Face ID</h3>
 
         <div class="add-face">
-            <input type="text" placeholder="Enter Face ID" />
+            <input type="text" />
             <button type="button" class="button button-secondary" data-track="parent-caregiver">Add</button>
         </div>
 
@@ -133,7 +133,7 @@ class Tavus_Admin
                             <button type="button" class="remove-face">X</button>
                         </div>
                     <?php endif ?>
-                    <span><?= esc_html($faceName) ?></span>
+                    <span class="face-name"><?= esc_html($faceName) ?></span>
                 </div>
             <?php endforeach ?>
         </div>
@@ -148,10 +148,10 @@ class Tavus_Admin
         } catch (\Exception $e) {
         }
     ?>
-        <h3>Healthcare Providers</h3>
+        <h3>Add Healthcare Provider Face ID</h3>
 
         <div class="add-face">
-            <input type="text" placeholder="Enter Face ID" />
+            <input type="text" />
             <button type="button" class="button button-secondary" data-track="healthcare-provider">Add</button>
         </div>
 
@@ -169,7 +169,7 @@ class Tavus_Admin
                             <button type="button" class="remove-face">X</button>
                         </div>
                     <?php endif ?>
-                    <span><?= esc_html($faceName) ?></span>
+                    <span class="face-name"><?= esc_html($faceName) ?></span>
                 </div>
             <?php endforeach ?>
         </div>

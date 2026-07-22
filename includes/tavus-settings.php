@@ -42,7 +42,8 @@ $settingsSection = match ($activeTab) {
     <?php elseif ($activeTab === 'tools') : ?>
         <!-- TODO: Finish hooking up clear cache button -->
         <div class="wrap">
-            <a href="" class="button button-primary">Clear Cache</a>
+            <button type="button" class="button button-primary clear-cache">Clear Cache</button>
+            <span class="cache-status"></span>
         </div>
     <?php else : ?>
         <form action="options.php" method="post">
