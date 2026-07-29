@@ -183,24 +183,7 @@ class Tavus_Admin
                 'api_key'   => defined('TAVUS_API_KEY') ? TAVUS_API_KEY : '',
                 'cache_ttl' => 1,
             ],
-            SettingsGroup::Faces => [
-                'face_ids'  => [
-                    'parent-caregiver'   => [
-                        'r3f427f43c9d',
-                        'r4ba1277e4fb',
-                        'r1d7cf9edbb4',
-                        'r1a0108fbd75',
-                        'r90bbd427f71',
-                        'rfc63eab317e',
-                        'rdd4c86e5e1a',
-                        'rb43357fb2ee',
-                    ],
-                    'healthcare-provider' => [
-                        'r621a6013477',
-                        'rd3ba0f30551',
-                    ],
-                ],
-            ]
+            SettingsGroup::Faces => ['face_ids'  => TAVUS_DEFAULT_FACE_IDS]
         };
 
         $option = match ($group) {
