@@ -131,8 +131,6 @@ class Tavus_API
 
     private function getFaceIds(?string $track = null)
     {
-        //TODO: Replace with fetching avatar face ids from admin page when built
-        // First two parent avatar ids stay, everything else is temporary right now
         $settings = get_option('tavus_face_settings', ['face_ids' => TAVUS_DEFAULT_FACE_IDS]);
         $faceIds = $settings['face_ids'] ?? TAVUS_DEFAULT_FACE_IDS;
 
