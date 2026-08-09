@@ -18,7 +18,7 @@ function AvatarPicker({ onSelect, answers }: AvatarPickerProps) {
   const track = answers.topic;
 
   // TEMPORARY: Restrict which avatars can be clicked
-  const activeAvatarIds = ["r3f427f43c9d", "r4ba1277e4fb"];
+  // const activeAvatarIds = ["r3f427f43c9d", "r4ba1277e4fb"];
 
   const {
     data: faces,
@@ -44,9 +44,10 @@ function AvatarPicker({ onSelect, answers }: AvatarPickerProps) {
         {faces.map((face) => (
           <div
             key={face.face_id}
-            className={`${styles.avatarWrapper} ${selectedAvatarId === face.face_id ? styles.selected : ""} ${!activeAvatarIds.includes(face.face_id) ? styles.inactive : ""}`}
+            className={`${styles.avatarWrapper} ${selectedAvatarId === face.face_id ? styles.selected : ""}`}
+            data-id={face.face_id}
             onClick={() => {
-              if (!activeAvatarIds.includes(face.face_id)) return;
+              // if (!activeAvatarIds.includes(face.face_id)) return;
 
               if (selectedAvatarId === face.face_id) {
                 setSelectedAvatarId(undefined);
@@ -55,14 +56,14 @@ function AvatarPicker({ onSelect, answers }: AvatarPickerProps) {
               }
             }}
           >
-            <video
-              src={face.thumbnail_video_url}
+            <img
+              src={face.thumbnail_image_url}
               className={styles.avatar}
-            ></video>
+              loading="lazy"
+            />
             <button
               aria-label={`Select avatar ${face.face_name}`}
               className={styles.selectAvatar}
-              disabled={!activeAvatarIds.includes(face.face_id)}
             ></button>
           </div>
         ))}

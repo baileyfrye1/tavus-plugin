@@ -13,6 +13,7 @@ export type Face = {
   face_id: string;
   face_name: string;
   thumbnail_video_url: string;
+  thumbnail_image_url: string;
   status: string;
   created_at: string;
 };

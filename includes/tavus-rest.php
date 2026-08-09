@@ -32,7 +32,7 @@ class Tavus_Rest_Controller
 			]
 		]);
 
-		register_rest_route('tavus/v1', '/video/(?P<videoId>[a-zA-Z0-9-]+)', [
+		register_rest_route('tavus/v1', '/videos/(?P<videoId>[a-zA-Z0-9-]+)', [
 			'methods' => 'GET',
 			'permission_callback' => '__return_true',
 			'callback' => [$this->api, 'fetchVideo'],
@@ -43,7 +43,7 @@ class Tavus_Rest_Controller
 					'sanitize_callback' => 'sanitize_text_field',
 				],
 				'face_id' => [
-					'required' => true,
+					'required' => false,
 					'type' => 'string',
 					'sanitize_callback' => 'sanitize_text_field',
 				],

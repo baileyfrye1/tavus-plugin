@@ -101,7 +101,7 @@ function ModuleGrid({ answers }: ModuleGridProps) {
               <X width="30" height="30" />
             </button>
             <video
-              src={selectedVideo.download_url}
+              src={selectedVideo.hosted_url}
               controls
               className={styles.video}
             />

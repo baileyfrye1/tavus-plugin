@@ -39,12 +39,13 @@ class Tavus_API
             throw new \InvalidArgumentException("Face ID is required");
         }
 
-        $videos = $this->getCachedData('tavus_videos_all', 'videos');
+        $videos = $this->getCachedData('tavus_videos_all', 'videos?limit=50', true);
 
         $filteredVideos = [];
 
         foreach ($videos as $video) {
             if (($video['status'] ?? null) !== 'generating') {
+                $video['poster_url'] = $this->getVideoThumbnail($video['download_url']);
                 $filteredVideos[] = $video;
             }
         }
@@ -66,17 +67,11 @@ class Tavus_API
     {
         $videoId = $request->get_param('videoId');
 
-        $response = wp_remote_get("{$this->baseUrl}/videos/$videoId", [
-            'headers' => [
-                'x-api-key' => $this->apiKey,
-            ],
-        ]);
+        $video = $this->getCachedData("tavus_video_{$videoId}", "videos/{$videoId}", false);
 
-        if (is_wp_error($response)) {
-            throw new \RuntimeException($response->get_error_message());
-        }
+        $video['poster_url'] = $this->getVideoThumbnail($video['download_url']);
 
-        return json_decode(wp_remote_retrieve_body($response), true);
+        return $video;
     }
 
     public function fetchFaces(WP_REST_Request $request)
@@ -86,7 +81,7 @@ class Tavus_API
 
         if ($faceId) {
             $cacheKey = "tavus_face_" . md5($faceId);
-            return $this->getCachedData($cacheKey, "faces?face_ids={$faceId}");
+            return $this->getCachedData($cacheKey, "faces?face_ids={$faceId}", true);
         }
 
         if (empty($track)) {
@@ -108,12 +103,18 @@ class Tavus_API
         $path = "faces?face_ids={$queryString}";
         $cacheKey = "tavus_faces_" . md5($queryString);
 
-        return $this->getCachedData($cacheKey, $path);
+        return $this->getCachedData($cacheKey, $path, true);
     }
 
     public function invalidateTransients()
     {
+        global $wpdb;
+
         delete_transient('tavus_videos_all');
+
+        $wpdb->query(
+            "DELETE FROM wp_options WHERE option_name LIKE '_transient_tavus_video_%'"
+        );
 
         $tracks = ['parent-caregiver', 'healthcare-provider', null];
 
@@ -144,7 +145,7 @@ class Tavus_API
         };
     }
 
-    private function getCachedData(string $cacheKey, string $endpoint)
+    private function getCachedData(string $cacheKey, string $endpoint, bool $isList)
     {
         $data = get_transient($cacheKey);
 
@@ -160,7 +161,8 @@ class Tavus_API
             }
 
             $body = json_decode(wp_remote_retrieve_body($response), true);
-            $data = $body['data'] ?? [];
+
+            $data = $isList ? ($body['data'] ?? []) : $body;
 
             $settings = get_option('tavus_general_settings', []);
             $cacheTTL = (int) ($settings['cache_ttl'] ?? 1) * HOUR_IN_SECONDS;
@@ -204,6 +206,20 @@ class Tavus_API
         if (preg_match('/^\[(parent-caregiver|healthcare-provider)\]/i', $title, $matches)) {
             return strtolower($matches[1]);
         }
+        return null;
+    }
+
+    private function getVideoThumbnail(string $downloadUrl)
+    {
+        if (empty($downloadUrl)) {
+            return null;
+        }
+
+        if (preg_match('#stream\.mux\.com/([^/]+)/#', $downloadUrl, $matches)) {
+            $playback_id = $matches[1];
+            return "https://image.mux.com/{$playback_id}/thumbnail.jpg";
+        }
+
         return null;
     }
 }
